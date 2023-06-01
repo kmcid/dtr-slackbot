@@ -6,6 +6,7 @@ import uuid
 import slack
 import datetime
 import psycopg2
+from waitress import serve
 from dotenv import load_dotenv
 from flask import Flask, request, Response
 from pathlib import Path
@@ -347,4 +348,7 @@ def dtr_dayoff():
 
 
 if __name__ == "__main__":
-    app.run(host='0.0.0.0', debug=True, use_reloader=True)
+    if os.environ["ENVIRONMENT"] == "PRODUCTION":
+        serve(app, host="0.0.0.0", port=8080)
+    else:
+        app.run(host='0.0.0.0', debug=True, use_reloader=True)
